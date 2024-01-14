@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="RemoteTargetsManager">
+    <targets>
+      <target name="WSL - Ubuntu" type="wsl" uuid="53dde989-9f3f-48de-b059-6173147378ae">
+        <config>
+          <option name="distributionMsId" value="Ubuntu" />
+          <option name="projectRootOnTarget" value="{exitCode=0, timeout=false, cancelled=false, stdout=/mnt/c/Users/Andrei/AppData/Local/Programs/IntelliJ IDEA Ultimate/jbr/bin&#10;, stderr=}/jlox" />
+        </config>
+        <ContributedStateBase type="JavaLanguageRuntime">
+          <config>
+            <option name="javaVersionString" value="1.8.0_392" />
+          </config>
+        </ContributedStateBase>
+      </target>
+      <target name="WSL - Arch" type="wsl" uuid="c6a3d355-593d-4d57-97fd-0de8d324c161">
+        <config>
+          <option name="distributionMsId" value="Arch" />
+          <option name="projectRootOnTarget" value="{exitCode=0, timeout=false, cancelled=false, stdout=/mnt/c/Users/Andrei/AppData/Local/Programs/IntelliJ IDEA Ultimate/jbr/bin&#10;, stderr=}/jlox" />
+        </config>
+        <ContributedStateBase type="JavaLanguageRuntime">
+          <config>
+            <option name="javaVersionString" value="21" />
+          </config>
+        </ContributedStateBase>
+      </target>
+    </targets>
+  </component>
+</project>

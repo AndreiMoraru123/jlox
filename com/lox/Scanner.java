@@ -74,6 +74,8 @@ public class Scanner {
                 if (match('/')) {
                     // consume until end of line (or file)
                     while (peek() != '\n' && !isAtEnd()) advance();
+                } else if (match('*')) {
+                    blockComment();
                 } else {
                     addToken(SLASH);
                 }
@@ -92,6 +94,27 @@ public class Scanner {
                 }
             }
         }
+    }
+
+    private void blockComment() {
+        int nesting = 1;
+        while (nesting > 0) {
+            if (isAtEnd()) {
+                Lox.error(line, "Unterminated block comment.");
+                return;
+            }
+            char c = advance();
+            if (c == '/' && peek() == '*') {
+                advance(); // consume the *
+                nesting++;
+            } else if (c == '*' && peek() == '/') {
+                advance(); // consume the /
+                nesting--;
+            } else if (c == '\n') {
+                line++;
+            }
+        }
+
     }
 
     private boolean isAlpha(char c) {

@@ -23,7 +23,18 @@ public class Parser {
   }
 
   private Expr expression() {
-    return equality();
+    return ternary();
+  }
+
+  private Expr ternary() {
+    Expr condition = equality();
+    if (match(QUESTION_MARK)) {
+      Expr thenBranch = expression();
+      consume(COLON, "Expect ':' after expression in ternary.");
+      Expr elseBranch = expression();
+      return new Expr.Ternary(condition, thenBranch, elseBranch);
+    }
+    return condition;
   }
 
   private Expr equality() {

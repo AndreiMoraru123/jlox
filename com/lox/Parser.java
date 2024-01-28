@@ -27,6 +27,10 @@ public class Parser {
   }
 
   private Expr equality() {
+    if (match(BANG_EQUAL, EQUAL_EQUAL)) {
+      Token operator = previous();
+      throw error(operator, "Missing left-hand operand.");
+    }
     Expr expr = comparison();
     while (match(BANG_EQUAL, EQUAL_EQUAL)) {
       Token operator = previous();
@@ -37,6 +41,10 @@ public class Parser {
   }
 
   private Expr comparison() {
+    if (match(GREATER, GREATER_EQUAL, LESS, LESS_EQUAL)) {
+      Token operator = previous();
+      throw error(operator, "Missing left-hand operand.");
+    }
     Expr expr = term();
     while (match(GREATER, GREATER_EQUAL, LESS, LESS_EQUAL)) {
       Token operator = previous();

@@ -14,6 +14,8 @@ abstract class Stmt {
 
     R visitVarStmt(Var stmt);
 
+    R visitBreakStmt(Break stmt);
+
     R visitWhileStmt(While stmt);
   }
 
@@ -86,6 +88,19 @@ abstract class Stmt {
 
     final Token name;
     final Expr initializer;
+  }
+
+  static class Break extends Stmt {
+    Break(Token keyword) {
+      this.keyword = keyword;
+    }
+
+    @Override
+    <R> R accept(Visitor<R> visitor) {
+      return visitor.visitBreakStmt(this);
+    }
+
+    final Token keyword;
   }
 
   static class While extends Stmt {

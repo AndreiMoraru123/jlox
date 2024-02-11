@@ -5,7 +5,6 @@ import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 
 public class GenerateAst {
   public static void main(String[] args) throws IOException {
@@ -34,6 +33,7 @@ public class GenerateAst {
             "If         : Expr condition, Stmt thenBranch," + " Stmt elseBranch",
             "Print      : Expr expression ",
             "Var        : Token name, Expr initializer",
+            "Break      : Token keyword",
             "While      : Expr condition, Stmt body"));
   }
 

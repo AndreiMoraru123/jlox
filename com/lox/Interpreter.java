@@ -229,9 +229,18 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
   }
 
   @Override
+  public Void visitBreakStmt(Stmt.Break stmt) {
+    throw new BreakException();
+  }
+
+  @Override
   public Void visitWhileStmt(Stmt.While stmt) {
-    while (isTruthy(evaluate(stmt.condition))) {
-      execute(stmt.body);
+    try {
+      while (isTruthy(evaluate(stmt.condition))) {
+        execute(stmt.body);
+      }
+    } catch (BreakException breakException) {
+
     }
     return null;
   }

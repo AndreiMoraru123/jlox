@@ -5,7 +5,6 @@ import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 
 public class GenerateAst {
   public static void main(String[] args) throws IOException {
@@ -22,6 +21,7 @@ public class GenerateAst {
             "Binary   : Expr left, Token operator, Expr right",
             "Call     : Expr callee, Token paren, List<Expr> arguments",
             "Grouping : Expr expression",
+            "Lambda   : List<Token> params," + " List<Stmt> body",
             "Literal  : Object value",
             "Logical  : Expr left, Token operator, Expr right",
             "Unary    : Token operator, Expr right",
@@ -33,6 +33,7 @@ public class GenerateAst {
             "Block      : List<Stmt> statements",
             "Expression : Expr expression",
             "Function   : Token name, List<Token> params," + " List<Stmt> body",
+            "Lambda     : List<Token> params," + " List<Stmt> body",
             "If         : Expr condition, Stmt thenBranch," + " Stmt elseBranch",
             "Print      : Expr expression ",
             "Return     : Token keyword, Expr value",

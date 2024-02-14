@@ -12,6 +12,8 @@ abstract class Expr {
 
     R visitGroupingExpr(Grouping expr);
 
+    R visitLambdaExpr(Lambda expr);
+
     R visitLiteralExpr(Literal expr);
 
     R visitLogicalExpr(Logical expr);
@@ -81,6 +83,21 @@ abstract class Expr {
     }
 
     final Expr expression;
+  }
+
+  static class Lambda extends Expr {
+    Lambda(List<Token> params, List<Stmt> body) {
+      this.params = params;
+      this.body = body;
+    }
+
+    @Override
+    <R> R accept(Visitor<R> visitor) {
+      return visitor.visitLambdaExpr(this);
+    }
+
+    final List<Token> params;
+    final List<Stmt> body;
   }
 
   static class Literal extends Expr {

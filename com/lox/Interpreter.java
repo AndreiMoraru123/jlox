@@ -141,6 +141,12 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     return evaluate(expr.expression);
   }
 
+  @Override
+  public Object visitLambdaExpr(Expr.Lambda expr) {
+    LoxLambda lambda = new LoxLambda(expr, environment);
+    return lambda;
+  }
+
   private Object evaluate(Expr expression) {
     return expression.accept(this);
   }
@@ -251,6 +257,13 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
   public Void visitFunctionStmt(Stmt.Function stmt) {
     LoxFunction function = new LoxFunction(stmt, environment);
     environment.define(stmt.name.lexeme, function);
+    return null;
+  }
+
+  @Override
+  public Void visitLambdaStmt(Stmt.Lambda stmt) {
+    LoxLambda lambda = new LoxLambda(stmt, environment);
+    environment.define("fn " + environment.toString(), lambda);
     return null;
   }
 

@@ -9,7 +9,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
 
   final Environment globals = new Environment();
   private Environment environment = globals;
-  private final Map<Expr, Integer> locals = new HashMap<>();
+  private final Map<Token, Variable> locals = new HashMap<>();
 
   Interpreter() {
     globals.define(
@@ -35,10 +35,9 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
   @Override
   public Object visitAssignExpr(Expr.Assign expr) {
     Object value = evaluate(expr.value);
-
-    Integer distance = locals.get(expr);
-    if (distance != null) {
-      environment.assignAt(distance, expr.name, value);
+    Variable location = locals.get(expr.name);
+    if (location != null) {
+      environment.assignAt(location.detph, expr.name, value);
     } else {
       globals.assign(expr.name, value);
     }
@@ -196,9 +195,9 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
   }
 
   private Object lookUpVariable(Token name, Expr expr) {
-    Integer distance = locals.get(expr);
-    if (distance != null) {
-      return environment.getAt(distance, name.lexeme);
+    Variable location = locals.get(name);
+    if (location != null) {
+      return environment.getAt(location.detph, name.lexeme);
     } else {
       return globals.get(name);
     }
@@ -317,7 +316,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     return null;
   }
 
-  void resolve(Expr expr, int depth) {
-    locals.put(expr, depth);
+  void resolve(Token name, int depth, int index) {
+    locals.put(name, new Variable(depth, index));
   }
 }

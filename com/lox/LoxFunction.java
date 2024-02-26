@@ -35,4 +35,10 @@ public class LoxFunction implements LoxCallable {
     }
     return null;
   }
+
+  LoxFunction bind(LoxInstance instance) {
+    Environment environment = new Environment(clojure);
+    environment.define("this", instance);
+    return new LoxFunction(declaration, environment);
+  }
 }

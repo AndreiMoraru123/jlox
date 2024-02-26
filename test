@@ -4,11 +4,27 @@ class Cake {
     this.adjective = adjective;
   }
 
-  taste() {
-    print "The " + this.flavor + " cake is " + this.adjective + "!";
+  taste(flavor) {
+    print "The " + flavor + " cake is " + this.adjective + "!";
   }
 }
 
 var cake = Cake("delicious");
-cake.flavor = "German chocolate";
-cake.taste();
+var flavor = "German chocolate";
+cake.taste(flavor);
+
+class Bacon {
+  class eat() {
+    print "Crunch crunch crunch!";
+  }
+}
+
+Bacon.eat(); // Prints "Crunch crunch crunch!".
+
+class Math {
+  class square(n) {
+    return n * n;
+  }
+}
+
+print Math.square(3); // Prints "9".

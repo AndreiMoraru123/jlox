@@ -1,9 +1,6 @@
 package com.lox;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
+import java.util.*;
 
 public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
 
@@ -137,7 +134,12 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
   @Override
   public Object visitGetExpr(Expr.Get expr) {
     Object object = evaluate(expr.object);
-    if (object instanceof LoxInstance) {
+    if (object instanceof LoxInstance instance) {
+      LoxFunction getter = instance.klass.findGetter(expr.name.lexeme);
+      if (getter != null) {
+        return getter.bind(instance).call(this, Collections.emptyList());
+      }
+      // fallback to normal property access
       return ((LoxInstance) object).get(expr.name);
     }
 
@@ -280,13 +282,20 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     environment.define(stmt.name.lexeme, null);
 
     Map<String, LoxFunction> methods = new HashMap<>();
+    Map<String, LoxFunction> getters = new HashMap<>();
+
     for (Stmt.Function method : stmt.methods) {
       LoxFunction function =
           new LoxFunction(method, environment, method.name.lexeme.equals("init"));
       methods.put(method.name.lexeme, function);
     }
 
-    LoxClass klass = new LoxClass(stmt.name.lexeme, methods);
+    for (Stmt.Function getter : stmt.getters) {
+      LoxFunction function = new LoxFunction(getter, environment, false);
+      getters.put(getter.name.lexeme, function);
+    }
+
+    LoxClass klass = new LoxClass(stmt.name.lexeme, methods, getters);
     environment.assign(stmt.name, klass);
     return null;
   }

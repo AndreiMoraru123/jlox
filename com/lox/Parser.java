@@ -1,5 +1,7 @@
 package com.lox;
 
+import java.text.ParseException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Arrays;
 import java.util.ArrayList;
@@ -41,12 +43,26 @@ public class Parser {
     consume(LEFT_BRACE, "Expect '{' before class body.");
 
     List<Stmt.Function> methods = new ArrayList<>();
+    List<Stmt.Function> getters = new ArrayList<>();
     while (!check(RIGHT_BRACE) && !isAtEnd()) {
-      methods.add(function("method"));
+      if (check(IDENTIFIER) && peekNext().type == LEFT_PAREN) {
+        methods.add(function("method"));
+      } else if (check(IDENTIFIER) && peekNext().type == LEFT_BRACE) {
+        getters.add(getter());
+      } else {
+        throw new ParseError();
+      }
     }
 
     consume(RIGHT_BRACE, "Expect '}' after class body.");
-    return new Stmt.Class(name, methods);
+    return new Stmt.Class(name, methods, getters);
+  }
+
+  private Stmt.Function getter() {
+    Token name = consume(IDENTIFIER, "Expect getter name.");
+    consume(LEFT_BRACE, "Expect '{' before getter body.");
+    List<Stmt> body = block();
+    return new Stmt.Function(name, Collections.emptyList(), body);
   }
 
   private Stmt.Function function(String kind) {
@@ -373,6 +389,11 @@ public class Parser {
 
   private Token peek() {
     return tokens.get(current);
+  }
+
+  private Token peekNext() {
+    if (current + 1 >= tokens.size()) return tokens.get(tokens.size() - 1);
+    return tokens.get(current + 1);
   }
 
   private Token previous() {

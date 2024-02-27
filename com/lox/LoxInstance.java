@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class LoxInstance {
   private final Map<String, Object> fields = new HashMap<>();
-  private LoxClass klass;
+  LoxClass klass;
 
   LoxInstance(LoxClass klass) {
     this.klass = klass;
@@ -19,6 +19,11 @@ public class LoxInstance {
   public Object get(Token name) {
     if (fields.containsKey(name.lexeme)) {
       return fields.get(name.lexeme);
+    }
+
+    LoxFunction getter = klass.findGetter(name.lexeme);
+    if (getter != null) {
+      return getter.bind(this);
     }
 
     LoxFunction method = klass.findMethod(name.lexeme);

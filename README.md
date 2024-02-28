@@ -1,6 +1,6 @@
 ## Lox (programming language implementation)
 
-This is the three-pass interpreter Java implementation from the book.
+This is the three-walk interpreter Java implementation from the book.
 
 Each branch (other than `master`) represents an addition to the language, encompassing all the challenges (well, at least those that involve Java code) proposed by the author throughout each chapter.
 

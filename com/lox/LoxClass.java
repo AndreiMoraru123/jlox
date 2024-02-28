@@ -8,7 +8,7 @@ public class LoxClass implements LoxCallable {
   final String name;
   private final Map<String, LoxFunction> methods;
 
-  private Map<String, LoxFunction> extendedMethods = new HashMap<>();
+  private Map<String, LoxFunction> extendedMethods;
   final LoxClass superclass;
 
   LoxClass(String name, LoxClass superclass, Map<String, LoxFunction> methods) {
@@ -54,6 +54,9 @@ public class LoxClass implements LoxCallable {
   }
 
   public void addExtensionMethods(Map<String, LoxFunction> methods) {
+    if (extendedMethods == null) {
+      extendedMethods = new HashMap<>();
+    }
     extendedMethods.putAll(methods);
   }
 

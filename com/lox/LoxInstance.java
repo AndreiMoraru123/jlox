@@ -26,6 +26,11 @@ public class LoxInstance {
       return method.bind(this);
     }
 
+    LoxFunction extendedMethod = klass.findExtensionMethod(name.lexeme);
+    if (extendedMethod != null) {
+      return extendedMethod.bind(this);
+    }
+
     throw new RuntimeError(name, "Underfined property '" + name.lexeme + "'.");
   }
 

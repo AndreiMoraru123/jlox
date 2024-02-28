@@ -33,6 +33,7 @@ public enum TokenType {
   AND,
   CLASS,
   ELSE,
+  EXTEND,
   FALSE,
   FUN,
   FOR,

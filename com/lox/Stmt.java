@@ -8,6 +8,8 @@ abstract class Stmt {
 
     R visitClassStmt(Class stmt);
 
+    R visitExtensionStmt(Extension stmt);
+
     R visitExpressionStmt(Expression stmt);
 
     R visitFunctionStmt(Function stmt);
@@ -50,6 +52,21 @@ abstract class Stmt {
 
     final Token name;
     final Expr.Variable superclass;
+    final List<Stmt.Function> methods;
+  }
+
+  static class Extension extends Stmt {
+    Extension(Token className, List<Stmt.Function> methods) {
+      this.className = className;
+      this.methods = methods;
+    }
+
+    @Override
+    <R> R accept(Visitor<R> visitor) {
+      return visitor.visitExtensionStmt(this);
+    }
+
+    final Token className;
     final List<Stmt.Function> methods;
   }
 

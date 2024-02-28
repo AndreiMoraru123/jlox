@@ -1,15 +1,14 @@
 package com.lox;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Stack;
+import java.util.*;
 
 public class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
   private final Interpreter interpreter;
   private final Stack<HashMap<String, Boolean>> scopes = new Stack<>();
   private FunctionType currentFunction = FunctionType.NONE;
   private ClassType currentClass = ClassType.NONE;
+
+  private Set<String> declaredClasses = new HashSet<>();
 
   public Resolver(Interpreter interpreter) {
     this.interpreter = interpreter;
@@ -133,6 +132,7 @@ public class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
 
     declare(stmt.name);
     define(stmt.name);
+    declaredClasses.add(stmt.name.lexeme);
 
     if (stmt.superclass != null && stmt.name.lexeme.equals(stmt.superclass.name.lexeme)) {
       Lox.error(stmt.superclass.name, "A class can't inherit from itself.");
@@ -164,6 +164,22 @@ public class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
     if (stmt.superclass != null) endScope();
 
     currentClass = enclosingClass;
+    return null;
+  }
+
+  @Override
+  public Void visitExtensionStmt(Stmt.Extension stmt) {
+    if (!declaredClasses.contains(stmt.className.lexeme)) {
+      Lox.error(stmt.className, "Can't extend undefined class '" + stmt.className.lexeme + "'.");
+      return null;
+    }
+    currentClass = ClassType.CLASS;
+
+    for (Stmt.Function method : stmt.methods) {
+      FunctionType declaration = FunctionType.METHOD;
+      resolveFunction(method, declaration);
+    }
+
     return null;
   }
 

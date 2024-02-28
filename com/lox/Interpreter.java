@@ -321,6 +321,23 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     return null;
   }
 
+  @Override
+  public Void visitExtensionStmt(Stmt.Extension stmt) {
+    LoxClass klass = (LoxClass) environment.get(stmt.className);
+    if (klass == null) {
+      throw new RuntimeError(stmt.className, "Undefined class '" + stmt.className.lexeme + "'.");
+    }
+
+    Map<String, LoxFunction> extendedMethods = new HashMap<>();
+    for (Stmt.Function method : stmt.methods) {
+      LoxFunction function = new LoxFunction(method, environment, false);
+      extendedMethods.put(method.name.lexeme, function);
+    }
+
+    klass.addExtensionMethods(extendedMethods);
+    return null;
+  }
+
   void executeBlock(List<Stmt> statements, Environment environment) {
     Environment previous = this.environment;
     try {

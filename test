@@ -9,21 +9,13 @@ class Cake {
   }
 }
 
+extend Cake {
+  cook () {
+    print "Mmm delicious";
+  }
+}
+
 var cake = Cake("delicious");
 cake.flavor = "German chocolate";
 cake.taste();
-
-class Doughnut {
-  cook() {
-    print "Fry until golden brown.";
-  }
-}
-
-class BostonCream < Doughnut {
-  cook() {
-    super.cook();
-    print "Pipe full of custard and coat with chocolate.";
-  }
-}
-
-BostonCream().cook();
+cake.cook();
